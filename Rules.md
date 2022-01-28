@@ -24,25 +24,25 @@ Cílem je vytvořit program, který bude hrát hru lodě s programem soupeře. T
 12. Vítězí hráč, který dokáže dříve potopit všechny lodě protihráče.
 
 ### Správné rozmístění
-![Obr. 1]()
+![Obr. 1](sources/spravne.png)
 ### Špstné rozmístění
-![Obr. 2]()
+![Obr. 2](sources/spatne.png)
 
 ## Pravidla komunikace programů
 Programy by neměly na standardní výstup vypisovat nic nad rámec tohoto zadání. Můžete ale udělat “ukecaný” mód Vašeho programu, který bude uživatelsky přívětivý, pokud tento nebude výchozí po spuštění programu.
 ### Zahájení hry
 Jako první věc program na standardní výstup vypíše své herní pole. Pro moře použijte symbol `.` a pro část lodi symbol `X`. Výše ukázané hrací pole na obrázku 1 by tedy vypadalo takto:
 ```
-………X
-……X..X
-.XXXX….X
-…..XXX.X
-………X
-…..XX…
-..X……X
-..X……X
-..X…….
-……….
+.........X
+......X..X
+.XXXX....X
+.....XXX.X
+.........X
+.....XX...
+..X......X
+..X......X
+..X.......
+..........
 ```
 Na prvním řádku standardního vstupu obdržíte jedno číslo:
 - `1` - začíná váš program
@@ -69,7 +69,7 @@ Program musí jít spustit z příkazové řádky na operačním systému Window
   
 V případě zájmu o povolení dalšího programovacího jazyka kontaktujte V. Švandelíka.  
 
-### Vyhodnocení programů
+## Vyhodnocení programů
 Po konci období na tvorbu programů nastane vyhodnocení - turnaj. V tomto turnaji budou spuštěny všechny programy proti sobě a bude se zaznamenávat počet výher (1 body) a počet proher (0 bodů). Zároveň se bude zaznamenávat počet výstřelů každého z hráčů. 
 
 Turnaj vyhraje ten hráč, který bude mít nejvíce bodů. V případě remízy ten z hráčů, které využil během celého turnaje méně výstřelů.  
