@@ -1,1 +1,1 @@
-# typescript-node-project
+# Battleships AI
