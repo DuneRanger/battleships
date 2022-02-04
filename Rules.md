@@ -25,7 +25,7 @@ Cílem je vytvořit program, který bude hrát hru lodě s programem soupeře. T
 
 ### Správné rozmístění
 ![Obr. 1](sources/spravne.png)
-### Špstné rozmístění
+### Špatné rozmístění
 ![Obr. 2](sources/spatne.png)
 
 ## Pravidla komunikace programů
