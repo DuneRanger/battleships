@@ -8,14 +8,12 @@ class Ship {
     name: string;
     length: number;
     amount: number;
-    placed: number;
     sunken: number;
    
     constructor(name: string, length: number, amount: number) {
         this.name = name;
         this.length = length;
         this.amount = amount;
-        this.placed = 0;
         this.sunken = 0;
     }
 }
@@ -23,19 +21,21 @@ class Ship {
 function buildShip(ship: Ship) {
     for (let x = 0; x < ship.amount; x++) {
         let placed: boolean = false;
+        console.log("placing " + ship.name + "(" + ship.length + ")")
         again:
         while (!placed) {
-            let coords: number[] = [Math.floor(Math.random()*10), Math.floor(Math.random()*10)];
             let direction: boolean = Math.round(Math.random()) == 1;
-            console.log(coords, " ", direction);
-            console.log("checking validity");
+
 
             //Checks if the ship doesn't go out of bounds
-            if (coords.some(num => num + ship.length > board.length)) {
-                console.log("invalid len, continue")
-                continue again;
-            }
+            // if (coords.some(num => num + ship.length > board.length)) {
+            //     console.log("invalid len, continue")
+            //     continue again;
+            // }
             if (direction) { //horizontal (to the left)
+                let coords: number[] = [Math.floor(Math.random()*10), Math.floor(Math.random()*(board.length-ship.length))];
+                console.log(coords, " ", direction);
+                console.log("checking validity");
                 //Checks if the whole ship can fit there
                 for (let y = 0; y < ship.length; y++) {
                     if (!(board[coords[0]][coords[1]+y] === ".")) {
@@ -53,6 +53,9 @@ function buildShip(ship: Ship) {
                 if (coords[1]+ship.length < 10) board[coords[0]][coords[1]+ship.length] = "N";
             }
             else { //vertical (downwards)
+                let coords: number[] = [Math.floor(Math.random()*(board.length-ship.length)), Math.floor(Math.random()*10)];
+                console.log(coords, " ", direction);
+                console.log("checking validity");
                 //Checks if the whole ship can fit there
                 for (let y = 0; y < ship.length; y++) {
                     if (!(board[coords[0]+y][coords[1]] === ".")) {
@@ -85,14 +88,29 @@ let cruisers = new Ship("křížniky", 3, 2);
 let battleships = new Ship("bitevní lodě", 4, 1);
 let aircraftCarriers = new Ship("letadlová lodě", 5, 1);
 
-let board: Array<Array<string>> = []
-for (let i = 0; i < 10; i++) {
-    let tempRow: string[] = [];
-    for (let n = 0; n < 10; n++) {
-        tempRow.push(".");
-    }
-    board.push(tempRow);
-}
+let board: string[][] = [
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."]]
+
+    let enemyBoard: string[][] = [
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+    [".", ".", ".", ".", ".", ".", ".", ".", ".", "."]]
 
 buildShip(aircraftCarriers);
 buildShip(battleships);
@@ -100,7 +118,11 @@ buildShip(cruisers);
 buildShip(destroyers);
 buildShip(submarines);
 
-let boardClean: Array<Array<string>> = board.map(x => x.map(y => y === "N" ? y = "." : y = y))
+let boardClean: string[][] = board.map(x => x.map(y => y === "N" ? y = "." : y))
 for (let x of boardClean) {
     console.log(x.join(" "))
 }
+// console.log("\n\n")
+// for (let x of enemyBoard) {
+//     console.log(x.join(" "))
+// }
