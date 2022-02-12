@@ -43,16 +43,20 @@ class Ships {
             coords: []
         };
     }
+
     place(ship: {length: number, amount: number, coords: number[][][]}) {
         for (let x = 0; x < ship.amount; x++) {
             let placed: boolean = false;
+            
             while (!placed) {
+                
                 let direction: boolean = Math.random() >= 0.5;
                 if (direction){ //horizontal (to the right)
-
+                    
                     //Sets valid start coordinates, already condition, so the ship doesn't go out of bounds
                     let startCoords: number[] = [Math.floor(Math.random()*10), Math.floor(Math.random()*(board.length-ship.length))];
                     let coords: number[][] = [];
+                    
                     //Adds the coords of all positions the ship is at
                     for (let y = 0; y < ship.length; y++) {
                         coords.push([startCoords[0], startCoords[1]+y])
@@ -74,6 +78,7 @@ class Ships {
                     }
                 }
                 else { //vertical (downwards)
+                    
                     //Sets valid start coordinates, so the ship doesn't go out of bounds
                     let startCoords: number[] = [Math.floor(Math.random()*(board.length-ship.length)), Math.floor(Math.random()*10)];
                     let coords: number[][] = [];
