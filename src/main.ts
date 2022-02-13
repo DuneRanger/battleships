@@ -338,6 +338,9 @@ class Attack {
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
                         if (this.firstHit[1] === 0 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1]-1] !== ".") {
                             console.log("What the fuck");
+                            this.successfulHits = 0;
+                            this.shipFound = false;
+                            this.shipDirectionKnown = false;
                             return this.firstShot(parent);
                         }
                     }
@@ -346,6 +349,9 @@ class Attack {
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
                         if (this.firstHit[1] === 9 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1]+1] !== ".") {
                             console.log("What the fuck");
+                            this.successfulHits = 0;
+                            this.shipFound = false;
+                            this.shipDirectionKnown = false;
                             return this.firstShot(parent);
                         }
                     }
@@ -356,6 +362,9 @@ class Attack {
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
                         if (this.firstHit[0] === 0 || parent.opponentBoard[this.firstHit[0]-1][this.firstHit[1]] !== ".") {
                             console.log("What the fuck");
+                            this.successfulHits = 0;
+                            this.shipFound = false;
+                            this.shipDirectionKnown = false;
                             return this.firstShot(parent);
                         }
                     }
@@ -364,6 +373,9 @@ class Attack {
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
                         if (this.firstHit[0] === 9 || parent.opponentBoard[this.firstHit[0]+1][this.firstHit[1]] !== ".") {
                             console.log("What the fuck");
+                            this.successfulHits = 0;
+                            this.shipFound = false;
+                            this.shipDirectionKnown = false;
                             return this.firstShot(parent);
                         }
                     }
