@@ -157,29 +157,88 @@ class Attack {
                 }
                 else if (answer[answer.length-1] === "sunk") {
                     this.successfulHits = 0;
-                    this.firstShot(parent);
+                    return this.firstShot(parent);
                 }
                 else {
                     this.shipFound = true;
                     this.firstHit = shot;
-                    if (shot[0] > 0 && parent.opponentBoard[shot[0]-1][shot[1]] === ".") { this.shootingDirection = [false, false]; this.secondShot(parent); }
-                    else if (shot[0] < 9 && parent.opponentBoard[shot[0]+1][shot[1]] === ".") { this.shootingDirection = [false, true]; this.secondShot(parent); }
-                    else if (shot[1] > 0 && parent.opponentBoard[shot[0]][shot[1]-1] === ".") { this.shootingDirection = [true, false]; this.secondShot(parent); }
-                    else if (shot[1] < 9 && parent.opponentBoard[shot[0]][shot[1]+1] === ".") { this.shootingDirection = [true, true]; this.secondShot(parent); }
+                    if (shot[0] > 0 && parent.opponentBoard[shot[0]-1][shot[1]] === ".") { this.shootingDirection = [false, false]; return this.secondShot(parent); }
+                    else if (shot[0] < 9 && parent.opponentBoard[shot[0]+1][shot[1]] === ".") { this.shootingDirection = [false, true]; return this.secondShot(parent); }
+                    else if (shot[1] > 0 && parent.opponentBoard[shot[0]][shot[1]-1] === ".") { this.shootingDirection = [true, false]; return this.secondShot(parent); }
+                    else if (shot[1] < 9 && parent.opponentBoard[shot[0]][shot[1]+1] === ".") { this.shootingDirection = [true, true]; return this.secondShot(parent); }
                 }
             }
             else if (answer[0] === "miss") {
                 parent.opponentBoard[shot[0]][shot[1]] = "O"
-                parent.opponentTurn();
+                return parent.opponentTurn();
             }
         })
     }
 
     secondShot(parent: any) {
-        this.firstShot(parent)
+        let shot: number[] = [];
+        if (this.shootingDirection[0]) { // horizontal
+            if (this.shootingDirection[1]) { // right
+                shot = [this.firstHit[0], this.firstHit[1]+1];
+            }
+            else { // left
+                shot = [this.firstHit[0], this.firstHit[1]-1];
+            }
+        }
+        else { // vertical
+            if (this.shootingDirection[1]) { // down
+                shot = [this.firstHit[0]+1, this.firstHit[1]];
+            }
+            else { // up
+                shot = [this.firstHit[0]-1, this.firstHit[1]];
+            }
+        }
+
+        removeItem(this.possibleTargets, shot);
+        
+        rl.write(rows[shot[0]] + columns[shot[1]] + "\n");
+        rl.question("", (input) => {
+            let answer: string[] = input.split(", ");
+            
+            if (answer[0] === "hit") {
+                this.successfulHits += 1;
+                parent.opponentBoard[shot[0]][shot[1]] = "X";
+                if (answer[answer.length-1] === "end") {
+                    this.successfulHits = 0;
+                    return
+                }
+                else if (answer[answer.length-1] === "sunk") {
+                    this.successfulHits = 0;
+                    this.shipFound = false;
+                    this.firstShot(parent);
+                }
+                else {
+                    this.shipDirectionKnown = true;
+
+                    //switches direction if at the board border
+                    if (this.shootingDirection[0]) { // horizontal
+                        if (shot[1] === 0 || shot[1] === 9) this.shootingDirection[1] = !this.shootingDirection[1];
+                    }
+                    else { // vertical
+                        if (shot[0] === 0 || shot[1] === 9) this.shootingDirection[1] = !this.shootingDirection[1];
+                    }
+                    return this.latterShot(parent);
+                }
+            }
+            else if (answer[0] === "miss") {
+                parent.opponentBoard[shot[0]][shot[1]] = "O";
+                if (this.firstHit[0] > 0 && parent.opponentBoard[this.firstHit[0]-1][this.firstHit[1]] === ".") { this.shootingDirection = [false, false]; }
+                else if (this.firstHit[0] < 9 && parent.opponentBoard[this.firstHit[0]+1][this.firstHit[1]] === ".") { this.shootingDirection = [false, true]; }
+                else if (this.firstHit[1] > 0 && parent.opponentBoard[this.firstHit[0]][this.firstHit[1]-1] === ".") { this.shootingDirection = [true, false]; }
+                else if (this.firstHit[1] < 9 && parent.opponentBoard[this.firstHit[0]][this.firstHit[1]+1] === ".") { this.shootingDirection = [true, true]; }
+                else { this.shipFound = false; }
+                return parent.opponentTurn();
+            }
+        });
     }
 
     latterShot(parent: any) {
+        this.firstShot(parent);
     }
 }
 
@@ -260,14 +319,14 @@ class Game {
                 if (this.myBoard[coordinates[0]][coordinates[1]] !== "H") {
                     this.myBoard[coordinates[0]][coordinates[1]] = "O";
                 }
-                this.myTurn();
+                return this.myTurn();
             }
             else if (this.myBoard[coordinates[0]][coordinates[1]] === "X") {
                 // if ship sunk - hit, sunk
                     // if last ship sunk - hit, sunk, end
                 rl.write("hit\n");
                 this.myBoard[coordinates[0]][coordinates[1]] = "H";
-                this.opponentTurn();
+                return this.opponentTurn();
             }
         });
     }
