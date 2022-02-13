@@ -4,8 +4,8 @@ let rl = readline.createInterface({
     output: process.stdout
 });
 
-function removeItem<T>(arr: T[], value: any): T[] { 
-    const index = arr.indexOf(value);
+function removeItem(arr: any[], value: any): any[] { 
+    const index = arr.findIndex((el) => el.toString() === value.toString());
     if (index > -1) {
       arr.splice(index, 1);
     }
@@ -198,6 +198,12 @@ class Attack {
             }
         }
 
+        if (this.possibleTargets.findIndex((el) => el.toString() === [0, 5].toString()) === -1) {
+            console.log(this.possibleTargets);
+            console.log(shot)
+            console.log("What the fuck");
+            shot = this.possibleTargets[Math.floor(Math.random()*this.possibleTargets.length)]
+        }
         removeItem(this.possibleTargets, shot);
         
         rl.write(rows[shot[0]] + columns[shot[1]] + "\n");
@@ -282,6 +288,10 @@ class Attack {
             }
         }
 
+        if (this.possibleTargets.findIndex((el) => el.toString() === shot.toString()) === -1) {
+            console.log("What the fuck");
+            shot = this.possibleTargets[Math.floor(Math.random()*this.possibleTargets.length)]
+        }
         removeItem(this.possibleTargets, shot);
         
         rl.write(rows[shot[0]] + columns[shot[1]] + "\n");
@@ -308,22 +318,30 @@ class Attack {
                     //switches direction if at the board border or if the next shot in that direction is not valid
                     if (this.shootingDirection[0]) { // horizontal
                         if (this.shootingDirection[1]) { // right
-                            if (shot[1] === 9) this.shootingDirection[1] = false;
-                            else if (parent.opponentBoard[shot[0]][shot[1]+1] !== ".") this.shootingDirection[1] = false;
+                            if (shot[1] === 9 || parent.opponentBoard[shot[0]][shot[1]+1] !== ".") {
+                                this.shootingDirection[1] = false;
+                                this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
+                            }
                         }
                         else { // left
-                            if (shot[1] === 0) this.shootingDirection[1] = true;
-                            else if (parent.opponentBoard[shot[0]][shot[1]-1] !== ".") this.shootingDirection[1] = true;
+                            if (shot[1] === 0 || parent.opponentBoard[shot[0]][shot[1]-1] !== ".") {
+                                this.shootingDirection[1] = true;
+                                this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]+1;
+                            }
                         }
                     }
                     else { // vertical
                         if (this.shootingDirection[1]) { // down
-                            if (shot[0] === 9) this.shootingDirection[1] = false;
-                            else if (parent.opponentBoard[shot[0]+1][shot[1]] !== ".") this.shootingDirection[1] = false;
+                            if (shot[0] === 9 || parent.opponentBoard[shot[0]+1][shot[1]] !== ".") {
+                                this.shootingDirection[1] = false;
+                                this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]-1;
+                            }
                         }
                         else { // up
-                            if (shot[0] === 0) this.shootingDirection[1] = true;
-                            else if (parent.opponentBoard[shot[0]-1][shot[1]] !== ".") this.shootingDirection[1] = true;
+                            if (shot[0] === 0 || parent.opponentBoard[shot[0]-1][shot[1]] !== ".") {
+                                this.shootingDirection[1] = true;
+                                this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]+1;
+                            }
                         }
                     }
                     return this.latterShot(parent);
@@ -341,42 +359,38 @@ class Attack {
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
-                            return this.firstShot(parent);
                         }
                     }
                     else { // left
                         this.shootingDirection[1] = true;
-                        this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
+                        this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]+1;
                         if (this.firstHit[1] === 9 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1]+1] !== ".") {
                             console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
-                            return this.firstShot(parent);
                         }
                     }
                 }
                 else { // vertical
                     if (this.shootingDirection[1]) { // down
                         this.shootingDirection[1] = false;
-                        this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
+                        this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]-1;
                         if (this.firstHit[0] === 0 || parent.opponentBoard[this.firstHit[0]-1][this.firstHit[1]] !== ".") {
                             console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
-                            return this.firstShot(parent);
                         }
                     }
                     else { // up
                         this.shootingDirection[1] = true;
-                        this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
+                        this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]+1;
                         if (this.firstHit[0] === 9 || parent.opponentBoard[this.firstHit[0]+1][this.firstHit[1]] !== ".") {
                             console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
-                            return this.firstShot(parent);
                         }
                     }
                 }
