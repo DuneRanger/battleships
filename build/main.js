@@ -202,7 +202,7 @@ class Attack {
                 shot = [this.firstHit[0] - 1, this.firstHit[1]];
             }
         }
-        if (this.possibleTargets.findIndex((el) => el.toString() === [0, 5].toString()) === -1) {
+        if (this.possibleTargets.findIndex((el) => el.toString() === shot.toString()) === -1) {
             console.log(this.possibleTargets);
             console.log(shot);
             console.log("What the fuck");
