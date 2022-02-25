@@ -32,6 +32,7 @@ function removeItem(arr, value) {
     return arr;
 }
 //All ships have a width of 1 (eg. 1x1, 1x3, 1x5)
+//WARNING: If you add an object that isn't a ship, you WILL have to change all code blocks that iterate through the Ships class (AKA the code that checks if a ship was sunk)
 class Ships {
     constructor() {
         this.placed = 0;
@@ -445,6 +446,20 @@ class Game {
         for (let x of this.myBoard) {
             console.log(x.join(" "));
         }
+        for (let x of this.ships) {
+            if (typeof (x) !== "object")
+                continue;
+            console.log(x.coords);
+            for (let y of x.coords) {
+                for (let z of y) {
+                    console.log(z);
+                }
+                console.log("\n");
+                for (let z of y) {
+                    console.log(this.myBoard[z[0]][z[1]]);
+                }
+            }
+        }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
     myTurn() {
@@ -478,10 +493,21 @@ class Game {
                 return this.myTurn();
             }
             else if (this.myBoard[coordinates[0]][coordinates[1]] === "X") {
+                this.myBoard[coordinates[0]][coordinates[1]] = "H";
                 // if ship sunk - hit, sunk
+                //Iterates through the ships class and proceeds only with objects (AKA the actual ships)
+                for (let x of this.ships) {
+                    if (typeof (x) !== "object")
+                        continue;
+                    for (let y of x.coords) {
+                        if (y.every(el => el === "H")) {
+                            rl.write("hit, sunk\n");
+                            return this.opponentTurn();
+                        }
+                    }
+                }
                 // if last ship sunk - hit, sunk, end
                 rl.write("hit\n");
-                this.myBoard[coordinates[0]][coordinates[1]] = "H";
                 return this.opponentTurn();
             }
         });

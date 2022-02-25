@@ -22,10 +22,18 @@ class Ships {
     aircraftCarriers: {length: number, amount: number, coords: number[][][]};
     placed: number;
     sunken: number;
+    iterator: Function;
    
     constructor() {
         this.placed = 0;
         this.sunken = 0;
+        this.iterator = function() {
+            for (var name in this){
+                if (this.hasOwnProperty(name) && typeof this[name] === "object") {
+                    console.log(name + "=" + this[name]);
+                }
+            }
+        }
         this.submarines = {
             length: 1,
             amount: 1,
@@ -402,8 +410,8 @@ class Attack {
 }
 
 class Game {
-    attack: any;
-    ships: any;
+    attack: Attack;
+    ships: Ships;
     myBoard: string[][];
     opponentBoard: string[][];
 
