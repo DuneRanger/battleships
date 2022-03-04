@@ -37,6 +37,15 @@ class Ships {
     constructor() {
         this.placed = 0;
         this.sunken = 0;
+        this.iterator = function () {
+            let temp = [];
+            for (var name in this) {
+                if (this.hasOwnProperty(name) && typeof this[name] === "object") {
+                    temp.push(this[name]);
+                }
+            }
+            return temp;
+        };
         this.submarines = {
             length: 1,
             amount: 1,
@@ -446,19 +455,17 @@ class Game {
         for (let x of this.myBoard) {
             console.log(x.join(" "));
         }
-        for (let x of this.ships) {
-            if (typeof (x) !== "object")
-                continue;
+        for (let x of this.ships.iterator()) {
             console.log(x.coords);
             for (let y of x.coords) {
                 for (let z of y) {
                     console.log(z);
                 }
-                console.log("\n");
                 for (let z of y) {
                     console.log(this.myBoard[z[0]][z[1]]);
                 }
             }
+            console.log("\n");
         }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
@@ -496,11 +503,9 @@ class Game {
                 this.myBoard[coordinates[0]][coordinates[1]] = "H";
                 // if ship sunk - hit, sunk
                 //Iterates through the ships class and proceeds only with objects (AKA the actual ships)
-                for (let x of this.ships) {
-                    if (typeof (x) !== "object")
-                        continue;
+                for (let x of this.ships.iterator()) {
                     for (let y of x.coords) {
-                        if (y.every(el => el === "H")) {
+                        if (y.every(el => this.myBoard[el[0]][el[1]] === "H")) {
                             rl.write("hit, sunk\n");
                             return this.opponentTurn();
                         }
