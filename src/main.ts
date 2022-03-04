@@ -509,7 +509,7 @@ class Game {
                 //Needs to get rid of the ship coord array that was sunk
                 for (let x of this.ships.iterator()) {
                     for (let y of x.coords) {
-                        if (y.every(el => this.myBoard[el[0]][el[1]] === "H")) {
+                        if (y.every((el: number[]) => this.myBoard[el[0]][el[1]] === "H")) {
                             rl.write("hit, sunk\n");
                             return this.opponentTurn();
                         }
