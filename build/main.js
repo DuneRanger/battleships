@@ -159,12 +159,27 @@ class Attack {
             if (answer[0] === "hit") {
                 this.successfulHits = 1;
                 parent.opponentBoard[shot[0]][shot[1]] = "X";
+                for (let x of parent.opponentBoard) {
+                    console.log(x.join(" "));
+                }
                 if (answer[answer.length - 1] === "end") {
                     this.successfulHits = 0;
                     return;
                 }
                 else if (answer[answer.length - 1] === "sunk") {
                     this.successfulHits = 0;
+                    if (shot[0] !== 9)
+                        parent.opponentBoard[shot[0] + 1][shot[1]] = "N";
+                    if (shot[0] !== 0)
+                        parent.opponentBoard[shot[0] - 1][shot[1]] = "N";
+                    if (shot[1] !== 9)
+                        parent.opponentBoard[shot[0]][shot[1] + 1] = "N";
+                    if (shot[1] !== 0)
+                        parent.opponentBoard[shot[0]][shot[1] - 1] = "N";
+                    removeItem(this.possibleTargets, [shot[0] + 1, shot[1]]);
+                    removeItem(this.possibleTargets, [shot[0] - 1, shot[1]]);
+                    removeItem(this.possibleTargets, [shot[0], shot[1] + 1]);
+                    removeItem(this.possibleTargets, [shot[0], shot[1] - 1]);
                     return this.firstShot(parent);
                 }
                 else {
@@ -214,10 +229,11 @@ class Attack {
                 shot = [this.firstHit[0] - 1, this.firstHit[1]];
             }
         }
+        //This shouldn't be possible, but I let the program continue just so it doesn't crash and lose
         if (this.possibleTargets.findIndex((el) => el.toString() === shot.toString()) === -1) {
-            console.log(this.possibleTargets);
-            console.log(shot);
-            console.log("What the fuck");
+            // console.log(this.possibleTargets);
+            // console.log(shot)
+            // console.log("What the fuck");
             shot = this.possibleTargets[Math.floor(Math.random() * this.possibleTargets.length)];
         }
         removeItem(this.possibleTargets, shot);
@@ -227,6 +243,9 @@ class Attack {
             if (answer[0] === "hit") {
                 this.successfulHits += 1;
                 parent.opponentBoard[shot[0]][shot[1]] = "X";
+                for (let x of parent.opponentBoard) {
+                    console.log(x.join(" "));
+                }
                 if (answer[answer.length - 1] === "end") {
                     //reset variables just for the sake of it
                     this.successfulHits = 0;
@@ -236,12 +255,49 @@ class Attack {
                 else if (answer[answer.length - 1] === "sunk") {
                     this.successfulHits = 0;
                     this.shipFound = false;
-                    this.firstShot(parent);
+                    if (shot[0] !== 9)
+                        parent.opponentBoard[shot[0] + 1][shot[1]] = "N";
+                    if (shot[0] !== 0)
+                        parent.opponentBoard[shot[0] - 1][shot[1]] = "N";
+                    if (shot[1] !== 9)
+                        parent.opponentBoard[shot[0]][shot[1] + 1] = "N";
+                    if (shot[1] !== 0)
+                        parent.opponentBoard[shot[0]][shot[1] - 1] = "N";
+                    if (this.firstHit[0] !== 0)
+                        parent.opponentBoard[this.firstHit[0] - 1][this.firstHit[1]] = "N";
+                    if (this.firstHit[0] !== 9)
+                        parent.opponentBoard[this.firstHit[0] + 1][this.firstHit[1]] = "N";
+                    if (this.firstHit[1] !== 0)
+                        parent.opponentBoard[this.firstHit[0]][this.firstHit[1] - 1] = "N";
+                    if (this.firstHit[1] !== 9)
+                        parent.opponentBoard[this.firstHit[0]][this.firstHit[1] + 1] = "N";
+                    removeItem(this.possibleTargets, [shot[0] + 1, shot[1]]);
+                    removeItem(this.possibleTargets, [shot[0] - 1, shot[1]]);
+                    removeItem(this.possibleTargets, [shot[0], shot[1] + 1]);
+                    removeItem(this.possibleTargets, [shot[0], shot[1] - 1]);
+                    removeItem(this.possibleTargets, [this.firstHit[0] + 1, this.firstHit[1]]);
+                    removeItem(this.possibleTargets, [this.firstHit[0] - 1, this.firstHit[1]]);
+                    removeItem(this.possibleTargets, [this.firstHit[0], this.firstHit[1] + 1]);
+                    removeItem(this.possibleTargets, [this.firstHit[0], this.firstHit[1] - 1]);
+                    return this.firstShot(parent);
                 }
                 else {
                     this.shipDirectionKnown = true;
                     //switches direction if at the board border or if the next shot in that direction is not valid
                     if (this.shootingDirection[0]) { // horizontal
+                        if (shot[0] !== 0)
+                            parent.opponentBoard[shot[0] - 1][shot[1]] = "N";
+                        if (shot[0] !== 9)
+                            parent.opponentBoard[shot[0] + 1][shot[1]] = "N";
+                        if (this.firstHit[0] !== 0)
+                            parent.opponentBoard[this.firstHit[0] - 1][this.firstHit[1]] = "N";
+                        if (this.firstHit[0] !== 9)
+                            parent.opponentBoard[this.firstHit[0] + 1][this.firstHit[1]] = "N";
+                        console.log([shot[0] + 1, shot[1]]);
+                        removeItem(this.possibleTargets, [shot[0] + 1, shot[1]]);
+                        removeItem(this.possibleTargets, [shot[0] - 1, shot[1]]);
+                        removeItem(this.possibleTargets, [this.firstHit[0] + 1, this.firstHit[1]]);
+                        removeItem(this.possibleTargets, [this.firstHit[0] - 1, this.firstHit[1]]);
                         if (this.shootingDirection[1]) { // right
                             if (shot[1] === 9 || parent.opponentBoard[shot[0]][shot[1] + 1] !== ".") {
                                 this.shootingDirection[1] = false;
@@ -254,6 +310,18 @@ class Attack {
                         }
                     }
                     else { // vertical
+                        if (shot[1] !== 9)
+                            parent.opponentBoard[shot[0]][shot[1] + 1] = "N";
+                        if (shot[1] !== 0)
+                            parent.opponentBoard[shot[0]][shot[1] - 1] = "N";
+                        if (this.firstHit[1] !== 9)
+                            parent.opponentBoard[this.firstHit[0]][this.firstHit[1] + 1] = "N";
+                        if (this.firstHit[1] !== 0)
+                            parent.opponentBoard[this.firstHit[0]][this.firstHit[1] - 1] = "N";
+                        removeItem(this.possibleTargets, [shot[0], shot[1] + 1]);
+                        removeItem(this.possibleTargets, [shot[0], shot[1] - 1]);
+                        removeItem(this.possibleTargets, [this.firstHit[0], this.firstHit[1] + 1]);
+                        removeItem(this.possibleTargets, [this.firstHit[0], this.firstHit[1] - 1]);
                         if (this.shootingDirection[1]) { // down
                             if (shot[0] === 9 || parent.opponentBoard[shot[0] + 1][shot[1]] !== ".") {
                                 this.shootingDirection[1] = false;
@@ -282,10 +350,10 @@ class Attack {
                 else if (this.firstHit[1] < 9 && parent.opponentBoard[this.firstHit[0]][this.firstHit[1] + 1] === ".") {
                     this.shootingDirection = [true, true];
                 }
+                //Shouldn't be possible, but commenting out the console.log(), so I don't auto lose
                 else {
                     this.shipFound = false;
-                    console.log("What the fuck");
-                }
+                } //console.log("What the fuck"); }
                 return parent.opponentTurn();
             }
         });
@@ -309,8 +377,9 @@ class Attack {
                 shot = [this.firstHit[0] - this.successfulHits, this.firstHit[1]];
             }
         }
+        //shouldn't be possible, but here we are again, commenting it out
         if (this.possibleTargets.findIndex((el) => el.toString() === shot.toString()) === -1) {
-            console.log("What the fuck");
+            // console.log("What the fuck");
             shot = this.possibleTargets[Math.floor(Math.random() * this.possibleTargets.length)];
         }
         removeItem(this.possibleTargets, shot);
@@ -320,6 +389,9 @@ class Attack {
             if (answer[0] === "hit") {
                 this.successfulHits += 1;
                 parent.opponentBoard[shot[0]][shot[1]] = "X";
+                for (let x of parent.opponentBoard) {
+                    console.log(x.join(" "));
+                }
                 if (answer[answer.length - 1] === "end") {
                     //reset variables just for the sake of it
                     this.successfulHits = 0;
@@ -331,11 +403,41 @@ class Attack {
                     this.successfulHits = 0;
                     this.shipFound = false;
                     this.shipDirectionKnown = false;
-                    this.firstShot(parent);
+                    if (shot[0] !== 9)
+                        parent.opponentBoard[shot[0] + 1][shot[1]] = "N";
+                    if (shot[0] !== 0)
+                        parent.opponentBoard[shot[0] - 1][shot[1]] = "N";
+                    if (shot[1] !== 9)
+                        parent.opponentBoard[shot[0]][shot[1] + 1] = "N";
+                    if (shot[1] !== 0)
+                        parent.opponentBoard[shot[0]][shot[1] - 1] = "N";
+                    if (this.firstHit[0] !== 0)
+                        parent.opponentBoard[this.firstHit[0] - 1][this.firstHit[1]] = "N";
+                    if (this.firstHit[0] !== 9)
+                        parent.opponentBoard[this.firstHit[0] + 1][this.firstHit[1]] = "N";
+                    if (this.firstHit[1] !== 0)
+                        parent.opponentBoard[this.firstHit[0]][this.firstHit[1] - 1] = "N";
+                    if (this.firstHit[1] !== 9)
+                        parent.opponentBoard[this.firstHit[0]][this.firstHit[1] + 1] = "N";
+                    removeItem(this.possibleTargets, [shot[0] + 1, shot[1]]);
+                    removeItem(this.possibleTargets, [shot[0] - 1, shot[1]]);
+                    removeItem(this.possibleTargets, [shot[0], shot[1] + 1]);
+                    removeItem(this.possibleTargets, [shot[0], shot[1] - 1]);
+                    removeItem(this.possibleTargets, [this.firstHit[0] + 1, this.firstHit[1]]);
+                    removeItem(this.possibleTargets, [this.firstHit[0] - 1, this.firstHit[1]]);
+                    removeItem(this.possibleTargets, [this.firstHit[0], this.firstHit[1] + 1]);
+                    removeItem(this.possibleTargets, [this.firstHit[0], this.firstHit[1] - 1]);
+                    return this.firstShot(parent);
                 }
                 else {
                     //switches direction if at the board border or if the next shot in that direction is not valid
                     if (this.shootingDirection[0]) { // horizontal
+                        if (shot[0] !== 9)
+                            parent.opponentBoard[shot[0] + 1][shot[1]] = "N";
+                        if (shot[0] !== 0)
+                            parent.opponentBoard[shot[0] - 1][shot[1]] = "N";
+                        removeItem(this.possibleTargets, [shot[0] + 1, shot[1]]);
+                        removeItem(this.possibleTargets, [shot[0] - 1, shot[1]]);
                         if (this.shootingDirection[1]) { // right
                             if (shot[1] === 9 || parent.opponentBoard[shot[0]][shot[1] + 1] !== ".") {
                                 this.shootingDirection[1] = false;
@@ -350,6 +452,12 @@ class Attack {
                         }
                     }
                     else { // vertical
+                        if (shot[1] !== 9)
+                            parent.opponentBoard[shot[0]][shot[1] + 1] = "N";
+                        if (shot[1] !== 0)
+                            parent.opponentBoard[shot[0]][shot[1] - 1] = "N";
+                        removeItem(this.possibleTargets, [shot[0], shot[1] + 1]);
+                        removeItem(this.possibleTargets, [shot[0], shot[1] - 1]);
                         if (this.shootingDirection[1]) { // down
                             if (shot[0] === 9 || parent.opponentBoard[shot[0] + 1][shot[1]] !== ".") {
                                 this.shootingDirection[1] = false;
@@ -373,8 +481,9 @@ class Attack {
                     if (this.shootingDirection[1]) { // right
                         this.shootingDirection[1] = false;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
+                        //How many of these are there
                         if (this.firstHit[1] === 0 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1] - 1] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -383,8 +492,9 @@ class Attack {
                     else { // left
                         this.shootingDirection[1] = true;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]+1;
+                        //Don't tell me that they are at every direction...
                         if (this.firstHit[1] === 9 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1] + 1] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -395,8 +505,9 @@ class Attack {
                     if (this.shootingDirection[1]) { // down
                         this.shootingDirection[1] = false;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]-1;
+                        //Oh well then
                         if (this.firstHit[0] === 0 || parent.opponentBoard[this.firstHit[0] - 1][this.firstHit[1]] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -405,8 +516,9 @@ class Attack {
                     else { // up
                         this.shootingDirection[1] = true;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]+1;
+                        //...
                         if (this.firstHit[0] === 9 || parent.opponentBoard[this.firstHit[0] + 1][this.firstHit[1]] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -457,18 +569,6 @@ class Game {
         for (let x of this.myBoard) {
             console.log(x.join(" "));
         }
-        // for (let x of this.ships.iterator()) {
-        //     console.log(x.coords);
-        //     for(let y of x.coords) {
-        //         console.log(y)
-        //         for(let z of y) {
-        //         }
-        //         for(let z of y) {
-        //             // console.log(this.myBoard[z[0]][z[1]]);
-        //         }
-        //     }
-        //     console.log("\n")
-        // }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
     myTurn() {
@@ -488,10 +588,10 @@ class Game {
         }
     }
     opponentTurn() {
-        for (let x of this.myBoard) {
-            console.log(x.join(" "));
-        }
-        rl.question("opponentTurn\n", (input) => {
+        // for (let x of this.myBoard) {
+        //     console.log(x.join(" "))
+        // }
+        rl.question("", (input) => {
             let answer = input;
             let coordinates = [rows.indexOf(answer[0]), parseInt(answer.slice(1)) - 1];
             if (this.myBoard[coordinates[0]][coordinates[1]] !== "X") {
@@ -505,17 +605,14 @@ class Game {
                 this.myBoard[coordinates[0]][coordinates[1]] = "H";
                 //Needs to get rid of the ship coord array that was sunk
                 for (let i of this.ships.iterator()) {
-                    console.log("i", i.coords);
                     for (let j in i.coords) {
                         if (i.coords[j].every((el) => this.myBoard[el[0]][el[1]] === "H")) {
                             i.coords.splice(j, 1);
                             this.ships.sunken++;
-                            console.log("p", this.ships.placed, "s", this.ships.sunken);
                             if (this.ships.sunken === this.ships.placed) {
                                 return rl.write("hit, sunk, end\n");
                             }
                             rl.write("hit, sunk\n");
-                            console.log("s", i.coords);
                             return this.opponentTurn();
                         }
                     }
