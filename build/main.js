@@ -159,9 +159,9 @@ class Attack {
             if (answer[0] === "hit") {
                 this.successfulHits = 1;
                 parent.opponentBoard[shot[0]][shot[1]] = "X";
-                for (let x of parent.opponentBoard) {
-                    console.log(x.join(" "));
-                }
+                // for (let x of parent.opponentBoard) {
+                //     console.log(x.join(" "))
+                // }
                 if (answer[answer.length - 1] === "end") {
                     this.successfulHits = 0;
                     return;
@@ -243,9 +243,9 @@ class Attack {
             if (answer[0] === "hit") {
                 this.successfulHits += 1;
                 parent.opponentBoard[shot[0]][shot[1]] = "X";
-                for (let x of parent.opponentBoard) {
-                    console.log(x.join(" "));
-                }
+                // for (let x of parent.opponentBoard) {
+                //     console.log(x.join(" "))
+                // }
                 if (answer[answer.length - 1] === "end") {
                     //reset variables just for the sake of it
                     this.successfulHits = 0;
@@ -293,7 +293,7 @@ class Attack {
                             parent.opponentBoard[this.firstHit[0] - 1][this.firstHit[1]] = "N";
                         if (this.firstHit[0] !== 9)
                             parent.opponentBoard[this.firstHit[0] + 1][this.firstHit[1]] = "N";
-                        console.log([shot[0] + 1, shot[1]]);
+                        // console.log([shot[0]+1, shot[1]])
                         removeItem(this.possibleTargets, [shot[0] + 1, shot[1]]);
                         removeItem(this.possibleTargets, [shot[0] - 1, shot[1]]);
                         removeItem(this.possibleTargets, [this.firstHit[0] + 1, this.firstHit[1]]);
@@ -301,11 +301,13 @@ class Attack {
                         if (this.shootingDirection[1]) { // right
                             if (shot[1] === 9 || parent.opponentBoard[shot[0]][shot[1] + 1] !== ".") {
                                 this.shootingDirection[1] = false;
+                                this.successfulHits = 1;
                             }
                         }
                         else { // left
                             if (shot[1] === 0 || parent.opponentBoard[shot[0]][shot[1] - 1] !== ".") {
                                 this.shootingDirection[1] = true;
+                                this.successfulHits = 1;
                             }
                         }
                     }
@@ -325,11 +327,13 @@ class Attack {
                         if (this.shootingDirection[1]) { // down
                             if (shot[0] === 9 || parent.opponentBoard[shot[0] + 1][shot[1]] !== ".") {
                                 this.shootingDirection[1] = false;
+                                this.successfulHits = 1;
                             }
                         }
                         else { // up
                             if (shot[0] === 0 || parent.opponentBoard[shot[0] - 1][shot[1]] !== ".") {
                                 this.shootingDirection[1] = true;
+                                this.successfulHits = 1;
                             }
                         }
                     }
@@ -389,9 +393,9 @@ class Attack {
             if (answer[0] === "hit") {
                 this.successfulHits += 1;
                 parent.opponentBoard[shot[0]][shot[1]] = "X";
-                for (let x of parent.opponentBoard) {
-                    console.log(x.join(" "));
-                }
+                // for (let x of parent.opponentBoard) {
+                //     console.log(x.join(" "))
+                // }
                 if (answer[answer.length - 1] === "end") {
                     //reset variables just for the sake of it
                     this.successfulHits = 0;
@@ -566,15 +570,15 @@ class Game {
         this.ships.place(this.ships.battleships, this);
         this.ships.place(this.ships.aircraftCarriers, this);
         this.myBoard = this.myBoard.map(x => x.map(y => y === "N" ? y = "." : y));
-        for (let x of this.myBoard) {
-            console.log(x.join(" "));
-        }
+        // for (let x of this.myBoard) {
+        //     console.log(x.join(" "));
+        // }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
     myTurn() {
-        for (let x of this.opponentBoard) {
-            console.log(x.join(" "));
-        }
+        // for (let x of this.opponentBoard) {
+        //     console.log(x.join(" "));
+        // }
         if (this.attack.shipFound) {
             if (this.attack.shipDirectionKnown) {
                 this.attack.latterShot(this);
