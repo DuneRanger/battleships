@@ -93,6 +93,7 @@ class Ships {
                         if (startCoords[1]+ship.length < 10) parent.myBoard[startCoords[0]][startCoords[1]+ship.length] = "N";
                         
                         placed = true;
+                        this.placed++;
                         ship.coords.push(coords)
                     }
                 }
@@ -119,6 +120,7 @@ class Ships {
                         if (startCoords[0]+ship.length < 10) parent.myBoard[startCoords[0]+ship.length][startCoords[1]] = "N";
                         
                         placed = true;
+                        this.placed++;
                         ship.coords.push(coords)
                     }
                 }
@@ -209,10 +211,11 @@ class Attack {
             }
         }
 
+        //This shouldn't be possible, but I let the program continue just so it doesn't crash and lose
         if (this.possibleTargets.findIndex((el) => el.toString() === shot.toString()) === -1) {
-            console.log(this.possibleTargets);
-            console.log(shot)
-            console.log("What the fuck");
+            // console.log(this.possibleTargets);
+            // console.log(shot)
+            // console.log("What the fuck");
             shot = this.possibleTargets[Math.floor(Math.random()*this.possibleTargets.length)]
         }
         removeItem(this.possibleTargets, shot);
@@ -272,7 +275,8 @@ class Attack {
                 else if (this.firstHit[0] < 9 && parent.opponentBoard[this.firstHit[0]+1][this.firstHit[1]] === ".") { this.shootingDirection = [false, true]; }
                 else if (this.firstHit[1] > 0 && parent.opponentBoard[this.firstHit[0]][this.firstHit[1]-1] === ".") { this.shootingDirection = [true, false]; }
                 else if (this.firstHit[1] < 9 && parent.opponentBoard[this.firstHit[0]][this.firstHit[1]+1] === ".") { this.shootingDirection = [true, true]; }
-                else { this.shipFound = false; console.log("What the fuck"); }
+                //Shouldn't be possible, but commenting out the console.log(), so I don't auto lose
+                else { this.shipFound = false; }//console.log("What the fuck"); }
                 return parent.opponentTurn();
             }
         });
@@ -299,8 +303,9 @@ class Attack {
             }
         }
 
+        //shouldn't be possible, but here we are again, commenting it out
         if (this.possibleTargets.findIndex((el) => el.toString() === shot.toString()) === -1) {
-            console.log("What the fuck");
+            // console.log("What the fuck");
             shot = this.possibleTargets[Math.floor(Math.random()*this.possibleTargets.length)]
         }
         removeItem(this.possibleTargets, shot);
@@ -365,8 +370,9 @@ class Attack {
                     if (this.shootingDirection[1]) { // right
                         this.shootingDirection[1] = false;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]-1;
+                        //How many of these are there
                         if (this.firstHit[1] === 0 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1]-1] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -375,8 +381,9 @@ class Attack {
                     else { // left
                         this.shootingDirection[1] = true;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[1]+1;
+                        //Don't tell me that they are at every direction...
                         if (this.firstHit[1] === 9 || parent.opponentBoard[this.firstHit[0]][this.firstHit[1]+1] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -387,8 +394,9 @@ class Attack {
                     if (this.shootingDirection[1]) { // down
                         this.shootingDirection[1] = false;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]-1;
+                        //Oh well then
                         if (this.firstHit[0] === 0 || parent.opponentBoard[this.firstHit[0]-1][this.firstHit[1]] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -397,8 +405,9 @@ class Attack {
                     else { // up
                         this.shootingDirection[1] = true;
                         this.successfulHits = 1; // resets successful hits, so that the next shot will be from firstShot[0]+1;
+                        //...
                         if (this.firstHit[0] === 9 || parent.opponentBoard[this.firstHit[0]+1][this.firstHit[1]] !== ".") {
-                            console.log("What the fuck");
+                            // console.log("What the fuck");
                             this.successfulHits = 0;
                             this.shipFound = false;
                             this.shipDirectionKnown = false;
@@ -452,28 +461,16 @@ class Game {
         this.ships.place(this.ships.battleships, this);
         this.ships.place(this.ships.aircraftCarriers, this);
         this.myBoard = this.myBoard.map(x => x.map(y => y === "N" ? y = "." : y));
-        for (let x of this.myBoard) {
-            console.log(x.join(" "));
-        }
-        for (let x of this.ships.iterator()) {
-            console.log(x.coords);
-            for(let y of x.coords) {
-                for(let z of y) {
-                    console.log(z);
-                }
-                for(let z of y) {
-                    console.log(this.myBoard[z[0]][z[1]]);
-                }
-            }
-            console.log("\n")
-        }
+        // for (let x of this.myBoard) {
+        //     console.log(x.join(" "));
+        // }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
 
     myTurn() {
-        for (let x of this.opponentBoard) {
-            console.log(x.join(" "));
-        }
+        // for (let x of this.opponentBoard) {
+        //     console.log(x.join(" "));
+        // }
         if (this.attack.shipFound) {
             if (this.attack.shipDirectionKnown) {
                 this.attack.latterShot(this);
@@ -488,12 +485,12 @@ class Game {
     }
 
     opponentTurn() {
-        for (let x of this.myBoard) {
-            console.log(x.join(" "))
-        }
+        // for (let x of this.myBoard) {
+        //     console.log(x.join(" "))
+        // }
         rl.question("opponentTurn\n", (input) => {
             let answer: string = input;
-            let coordinates: number[] = [rows.indexOf(answer[0]), parseInt(answer[1])-1];
+            let coordinates: number[] = [rows.indexOf(answer[0]), parseInt(answer.slice(1))-1];
 
             if (this.myBoard[coordinates[0]][coordinates[1]] !== "X") {
                 rl.write("miss\n");
@@ -504,12 +501,15 @@ class Game {
             }
             else if (this.myBoard[coordinates[0]][coordinates[1]] === "X") {
                 this.myBoard[coordinates[0]][coordinates[1]] = "H";
-                // if ship sunk - hit, sunk
-                //Iterates through the ships class and proceeds only with objects (AKA the actual ships)
                 //Needs to get rid of the ship coord array that was sunk
-                for (let x of this.ships.iterator()) {
-                    for (let y of x.coords) {
-                        if (y.every((el: number[]) => this.myBoard[el[0]][el[1]] === "H")) {
+                for (let i of this.ships.iterator()) {
+                    for (let j in i.coords) {
+                        if (i.coords[j].every((el: number[]) => this.myBoard[el[0]][el[1]] === "H")) {
+                            i.coords.splice(j, 1);
+                            this.ships.sunken++;
+                            if (this.ships.sunken === this.ships.placed) {
+                                return rl.write("hit, sunk, end\n")
+                            }
                             rl.write("hit, sunk\n");
                             return this.opponentTurn();
                         }

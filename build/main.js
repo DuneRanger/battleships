@@ -99,6 +99,7 @@ class Ships {
                         if (startCoords[1] + ship.length < 10)
                             parent.myBoard[startCoords[0]][startCoords[1] + ship.length] = "N";
                         placed = true;
+                        this.placed++;
                         ship.coords.push(coords);
                     }
                 }
@@ -124,6 +125,7 @@ class Ships {
                         if (startCoords[0] + ship.length < 10)
                             parent.myBoard[startCoords[0] + ship.length][startCoords[1]] = "N";
                         placed = true;
+                        this.placed++;
                         ship.coords.push(coords);
                     }
                 }
@@ -455,18 +457,18 @@ class Game {
         for (let x of this.myBoard) {
             console.log(x.join(" "));
         }
-        for (let x of this.ships.iterator()) {
-            console.log(x.coords);
-            for (let y of x.coords) {
-                for (let z of y) {
-                    console.log(z);
-                }
-                for (let z of y) {
-                    console.log(this.myBoard[z[0]][z[1]]);
-                }
-            }
-            console.log("\n");
-        }
+        // for (let x of this.ships.iterator()) {
+        //     console.log(x.coords);
+        //     for(let y of x.coords) {
+        //         console.log(y)
+        //         for(let z of y) {
+        //         }
+        //         for(let z of y) {
+        //             // console.log(this.myBoard[z[0]][z[1]]);
+        //         }
+        //     }
+        //     console.log("\n")
+        // }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
     myTurn() {
@@ -491,7 +493,7 @@ class Game {
         }
         rl.question("opponentTurn\n", (input) => {
             let answer = input;
-            let coordinates = [rows.indexOf(answer[0]), parseInt(answer[1]) - 1];
+            let coordinates = [rows.indexOf(answer[0]), parseInt(answer.slice(1)) - 1];
             if (this.myBoard[coordinates[0]][coordinates[1]] !== "X") {
                 rl.write("miss\n");
                 if (this.myBoard[coordinates[0]][coordinates[1]] !== "H") {
@@ -501,12 +503,19 @@ class Game {
             }
             else if (this.myBoard[coordinates[0]][coordinates[1]] === "X") {
                 this.myBoard[coordinates[0]][coordinates[1]] = "H";
-                // if ship sunk - hit, sunk
-                //Iterates through the ships class and proceeds only with objects (AKA the actual ships)
-                for (let x of this.ships.iterator()) {
-                    for (let y of x.coords) {
-                        if (y.every(el => this.myBoard[el[0]][el[1]] === "H")) {
+                //Needs to get rid of the ship coord array that was sunk
+                for (let i of this.ships.iterator()) {
+                    console.log("i", i.coords);
+                    for (let j in i.coords) {
+                        if (i.coords[j].every((el) => this.myBoard[el[0]][el[1]] === "H")) {
+                            i.coords.splice(j, 1);
+                            this.ships.sunken++;
+                            console.log("p", this.ships.placed, "s", this.ships.sunken);
+                            if (this.ships.sunken === this.ships.placed) {
+                                return rl.write("hit, sunk, end\n");
+                            }
                             rl.write("hit, sunk\n");
+                            console.log("s", i.coords);
                             return this.opponentTurn();
                         }
                     }
