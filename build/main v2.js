@@ -632,4 +632,4 @@ let m = new Game();
 let rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 let columns = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 m.start();
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=main%20v2.js.map
