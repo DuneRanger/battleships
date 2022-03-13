@@ -35,7 +35,7 @@ function removeItem(arr, value) {
 //WARNING: If you add an object that isn't a ship, you WILL have to change all code blocks that iterate through the Ships class (AKA the code that checks if a ship was sunk)
 class Ships {
     constructor() {
-        this.placed = 0;
+        this.placed = 7;
         this.sunken = 0;
         this.iterator = function () {
             let temp = [];
@@ -49,27 +49,27 @@ class Ships {
         this.submarines = {
             length: 1,
             amount: 1,
-            coords: []
+            coords: [[[2, 9]]]
         };
         this.destroyers = {
             length: 2,
             amount: 2,
-            coords: []
+            coords: [[[8, 9], [7, 9]], [[5, 9], [4, 9]]]
         };
         this.cruisers = {
             length: 3,
             amount: 2,
-            coords: []
+            coords: [[[9, 2], [9, 3], [9, 4]], [[9, 6], [9, 7], [9, 8]]]
         };
         this.battleships = {
             length: 4,
             amount: 1,
-            coords: []
+            coords: [[[6, 0], [7, 0], [8, 0], [9, 0]]]
         };
         this.aircraftCarriers = {
             length: 5,
             amount: 1,
-            coords: []
+            coords: [[[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]]
         };
     }
     place(ship, parent) {
@@ -616,16 +616,16 @@ class Attack {
 class Game {
     constructor() {
         this.myBoard = [
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
-            [".", ".", ".", ".", ".", ".", ".", ".", ".", "."]
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "X"],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "X"],
+            [".", ".", ".", ".", ".", ".", ".", ".", ".", "X"],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "."],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "X"],
+            ["X", ".", ".", ".", ".", ".", ".", ".", ".", "X"],
+            ["X", ".", "X", "X", "X", ".", "X", "X", "X", "."]
         ];
         this.opponentBoard = [
             [".", ".", ".", ".", ".", ".", ".", ".", ".", "."],
@@ -643,11 +643,11 @@ class Game {
         this.ships = new Ships();
     }
     start() {
-        this.ships.place(this.ships.submarines, this);
-        this.ships.place(this.ships.destroyers, this);
-        this.ships.place(this.ships.cruisers, this);
-        this.ships.place(this.ships.battleships, this);
-        this.ships.place(this.ships.aircraftCarriers, this);
+        // this.ships.place(this.ships.submarines, this);
+        // this.ships.place(this.ships.destroyers, this);
+        // this.ships.place(this.ships.cruisers, this);
+        // this.ships.place(this.ships.battleships, this);
+        // this.ships.place(this.ships.aircraftCarriers, this);
         this.myBoard = this.myBoard.map(x => x.map(y => y === "N" ? y = "." : y));
         // for (let x of this.myBoard) {
         //     console.log(x.join(" "));
@@ -711,4 +711,4 @@ let m = new Game();
 let rows = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 let columns = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 m.start();
-//# sourceMappingURL=main%20v2.js.map
+//# sourceMappingURL=main%20v3.js.map
