@@ -649,9 +649,9 @@ class Game {
         this.ships.place(this.ships.battleships, this);
         this.ships.place(this.ships.aircraftCarriers, this);
         this.myBoard = this.myBoard.map(x => x.map(y => y === "N" ? y = "." : y));
-        for (let x of this.myBoard) {
-            console.log(x.join(" "));
-        }
+        // for (let x of this.myBoard) {
+        //     console.log(x.join(" "));
+        // }
         rl.question("", (a) => a === "1" ? this.myTurn() : this.opponentTurn());
     }
     myTurn() {
@@ -671,9 +671,9 @@ class Game {
         }
     }
     opponentTurn() {
-        for (let x of this.myBoard) {
-            console.log(x.join(" "))
-        }
+        // for (let x of this.myBoard) {
+        //     console.log(x.join(" "))
+        // }
         rl.question("", (input) => {
             let answer = input;
             let coordinates = [rows.indexOf(answer[0]), parseInt(answer.slice(1)) - 1];
